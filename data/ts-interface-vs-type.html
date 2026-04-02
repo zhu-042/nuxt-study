@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TypeScript: interface vs type 交互式示例</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0d1117;
+    color: #c9d1d9;
+    line-height: 1.6;
+    padding: 24px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 28px;
+    color: #58a6ff;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .subtitle {
+    text-align: center;
+    color: #8b949e;
+    margin-bottom: 32px;
+    font-size: 14px;
+  }
+  .section {
+    margin-bottom: 32px;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+    cursor: pointer;
+    user-select: none;
+  }
+  .section-header:hover { background: #1c2129; }
+  .section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #f0f6fc;
+  }
+  .tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+  .tag-interface { background: #1f6feb33; color: #58a6ff; }
+  .tag-type { background: #23863633; color: #3fb950; }
+  .tag-both { background: #d2992233; color: #d29922; }
+  .tag-diff { background: #f8514933; color: #f85149; }
+  .section-body { padding: 0; }
+  .code-block {
+    position: relative;
+    background: #0d1117;
+    padding: 16px;
+    overflow-x: auto;
+    font-size: 13.5px;
+    border-bottom: 1px solid #30363d;
+  }
+  .code-block:last-child { border-bottom: none; }
+  pre {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+    white-space: pre;
+    tab-size: 2;
+  }
+  .code-label {
+    display: inline-block;
+    font-size: 11px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    font-family: -apple-system, sans-serif;
+    font-weight: 600;
+  }
+  .label-ok { background: #23863633; color: #3fb950; }
+  .label-err { background: #f8514933; color: #f85149; }
+  .label-info { background: #1f6feb33; color: #58a6ff; }
+
+  .kw { color: #ff7b72; }
+  .type-name { color: #ffa657; }
+  .str { color: #a5d6ff; }
+  .num { color: #79c0ff; }
+  .cmt { color: #8b949e; font-style: italic; }
+  .prop { color: #c9d1d9; }
+  .op { color: #ff7b72; }
+  .fn { color: #d2a8ff; }
+  .punct { color: #c9d1d9; }
+
+  .note {
+    padding: 12px 16px;
+    background: #161b22;
+    font-size: 13px;
+    color: #8b949e;
+    border-top: 1px solid #30363d;
+  }
+  .note strong { color: #c9d1d9; }
+
+  .summary-box {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-top: 32px;
+  }
+  .summary-box h2 {
+    color: #58a6ff;
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  .summary-box table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  .summary-box th, .summary-box td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid #30363d;
+  }
+  .summary-box th {
+    color: #8b949e;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .summary-box td:first-child { color: #f0f6fc; font-weight: 500; }
+  .check { color: #3fb950; }
+  .cross { color: #f85149; }
+
+  .tip {
+    margin-top: 24px;
+    padding: 16px;
+    background: #1f6feb15;
+    border-left: 3px solid #58a6ff;
+    border-radius: 0 8px 8px 0;
+    font-size: 14px;
+  }
+  .tip strong { color: #58a6ff; }
+</style>
+</head>
+<body>
+
+<h1>interface vs type</h1>
+<p class="subtitle">TypeScript 核心区别 — 交互式代码示例（可直接在浏览器阅读）</p>
+
+<!-- 1. 声明合并 -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">1. 声明合并（Declaration Merging）</span>
+    <span class="tag tag-interface">interface 独有</span>
+  </div>
+  <div class="section-body">
+    <div class="code-block">
+      <div class="code-label label-ok">interface — 同名自动合并</div>
+<pre>
+<span class="kw">interface</span> <span class="type-name">User</span> {
+  <span class="prop">name</span>: <span class="type-name">string</span>;
+}
+
+<span class="kw">interface</span> <span class="type-name">User</span> {
+  <span class="prop">age</span>: <span class="type-name">number</span>;
+}
+
+<span class="cmt">// 合并结果: { name: string; age: number }</span>
+<span class="kw">const</span> <span class="prop">user</span>: <span class="type-name">User</span> = { <span class="prop">name</span>: <span class="str">"Alice"</span>, <span class="prop">age</span>: <span class="num">25</span> };
+</pre>
+    </div>
+    <div class="code-block">
+      <div class="code-label label-err">type — 同名直接报错</div>
+<pre>
+<span class="kw">type</span> <span class="type-name">User</span> = {
+  <span class="prop">name</span>: <span class="type-name">string</span>;
+}
+
+<span class="cmt">// Error: Duplicate identifier 'User'</span>
+<span class="kw">type</span> <span class="type-name">User</span> = {
+  <span class="prop">age</span>: <span class="type-name">number</span>;
+}
+</pre>
+    </div>
+    <div class="note">
+      <strong>应用场景：</strong>扩展第三方库类型时非常有用，比如给 <code>Window</code>、<code>Express.Request</code> 增加自定义字段。
+    </div>
+  </div>
+</div>
+
+<!-- 2. 联合类型 -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">2. 联合类型 & 判别联合（Discriminated Union）</span>
+    <span class="tag tag-type">type 独有</span>
+  </div>
+  <div class="section-body">
+    <div class="code-block">
+      <div class="code-label label-ok">type — 联合类型</div>
+<pre>
+<span class="kw">type</span> <span class="type-name">Status</span> = <span class="str">"loading"</span> | <span class="str">"success"</span> | <span class="str">"error"</span>;
+
+<span class="kw">type</span> <span class="type-name">ID</span> = <span class="type-name">string</span> | <span class="type-name">number</span>;
+</pre>
+    </div>
+    <div class="code-block">
+      <div class="code-label label-ok">type — 判别联合（状态机建模）</div>
+<pre>
+<span class="kw">type</span> <span class="type-name">Action</span> =
+  | { <span class="prop">type</span>: <span class="str">"add"</span>;    <span class="prop">payload</span>: <span class="type-name">Item</span> }
+  | { <span class="prop">type</span>: <span class="str">"remove"</span>; <span class="prop">id</span>: <span class="type-name">string</span> }
+  | { <span class="prop">type</span>: <span class="str">"clear"</span> };
+
+<span class="kw">function</span> <span class="fn">reducer</span>(<span class="prop">state</span>: <span class="type-name">State</span>, <span class="prop">action</span>: <span class="type-name">Action</span>) {
+  <span class="kw">switch</span> (<span class="prop">action</span>.<span class="prop">type</span>) {
+    <span class="kw">case</span> <span class="str">"add"</span>:
+      <span class="cmt">// action.payload 自动推断为 Item</span>
+      <span class="kw">return</span> { ...<span class="prop">state</span>, <span class="prop">items</span>: [...<span class="prop">state</span>.<span class="prop">items</span>, <span class="prop">action</span>.<span class="prop">payload</span>] };
+    <span class="kw">case</span> <span class="str">"remove"</span>:
+      <span class="cmt">// action.id 自动推断为 string</span>
+      <span class="kw">return</span> { ...<span class="prop">state</span>, <span class="prop">items</span>: <span class="prop">state</span>.<span class="prop">items</span>.<span class="fn">filter</span>(<span class="prop">i</span> <span class="op">=></span> <span class="prop">i</span>.<span class="prop">id</span> !== <span class="prop">action</span>.<span class="prop">id</span>) };
+  }
+}
+</pre>
+    </div>
+    <div class="note">
+      <strong>interface 做不到：</strong><code>interface</code> 无法表达 <code>A | B</code> 联合，只能描述单个对象形状。
+    </div>
+  </div>
+</div>
+
+<!-- 3. 元组 & 基本类型别名 -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">3. 元组 & 基本类型别名</span>
+    <span class="tag tag-type">type 独有</span>
+  </div>
+  <div class="section-body">
+    <div class="code-block">
+      <div class="code-label label-ok">type — 元组和基本类型别名</div>
+<pre>
+<span class="cmt">// 元组</span>
+<span class="kw">type</span> <span class="type-name">Pair</span> = [<span class="type-name">string</span>, <span class="type-name">number</span>];
+<span class="kw">const</span> <span class="prop">p</span>: <span class="type-name">Pair</span> = [<span class="str">"age"</span>, <span class="num">25</span>];
+
+<span class="cmt">// 基本类型别名</span>
+<span class="kw">type</span> <span class="type-name">Milliseconds</span> = <span class="type-name">number</span>;
+<span class="kw">type</span> <span class="type-name">UUID</span> = <span class="type-name">string</span>;
+
+<span class="cmt">// React 常见用法：事件处理函数类型</span>
+<span class="kw">type</span> <span class="type-name">ClickHandler</span> = (<span class="prop">e</span>: <span class="type-name">MouseEvent</span>) <span class="op">=></span> <span class="type-name">void</span>;
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- 4. 继承 / 扩展 -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">4. 继承与扩展方式对比</span>
+    <span class="tag tag-both">两者都能做</span>
+  </div>
+  <div class="section-body">
+    <div class="code-block">
+      <div class="code-label label-info">interface — 用 extends</div>
+<pre>
+<span class="kw">interface</span> <span class="type-name">Animal</span> {
+  <span class="prop">name</span>: <span class="type-name">string</span>;
+}
+
+<span class="kw">interface</span> <span class="type-name">Dog</span> <span class="kw">extends</span> <span class="type-name">Animal</span> {
+  <span class="prop">breed</span>: <span class="type-name">string</span>;
+}
+
+<span class="cmt">// 多继承也可以</span>
+<span class="kw">interface</span> <span class="type-name">Pet</span> <span class="kw">extends</span> <span class="type-name">Animal</span>, <span class="type-name">Serializable</span> {
+  <span class="prop">owner</span>: <span class="type-name">string</span>;
+}
+</pre>
+    </div>
+    <div class="code-block">
+      <div class="code-label label-info">type — 用交叉类型 &amp;</div>
+<pre>
+<span class="kw">type</span> <span class="type-name">Animal</span> = {
+  <span class="prop">name</span>: <span class="type-name">string</span>;
+};
+
+<span class="kw">type</span> <span class="type-name">Dog</span> = <span class="type-name">Animal</span> <span class="op">&</span> {
+  <span class="prop">breed</span>: <span class="type-name">string</span>;
+};
+
+<span class="cmt">// 组合多个类型</span>
+<span class="kw">type</span> <span class="type-name">Props</span> = <span class="type-name">BaseProps</span> <span class="op">&</span> <span class="type-name">ThemeProps</span> <span class="op">&</span> <span class="type-name">RouterProps</span>;
+</pre>
+    </div>
+    <div class="note">
+      <strong>区别：</strong><code>extends</code> 遇到属性冲突时直接报错（更安全）；<code>&</code> 交叉类型会尝试合并，可能产生 <code>never</code>（更灵活但需注意）。
+    </div>
+  </div>
+</div>
+
+<!-- 5. 映射类型 / 条件类型 -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">5. 映射类型 & 条件类型（类型体操）</span>
+    <span class="tag tag-type">type 独有</span>
+  </div>
+  <div class="section-body">
+    <div class="code-block">
+      <div class="code-label label-ok">type — 映射类型</div>
+<pre>
+<span class="cmt">// 把所有属性变为可选</span>
+<span class="kw">type</span> <span class="type-name">MyPartial</span>&lt;<span class="type-name">T</span>&gt; = {
+  [<span class="type-name">K</span> <span class="kw">in</span> <span class="kw">keyof</span> <span class="type-name">T</span>]?: <span class="type-name">T</span>[<span class="type-name">K</span>];
+};
+
+<span class="cmt">// 把所有属性变为只读</span>
+<span class="kw">type</span> <span class="type-name">MyReadonly</span>&lt;<span class="type-name">T</span>&gt; = {
+  <span class="kw">readonly</span> [<span class="type-name">K</span> <span class="kw">in</span> <span class="kw">keyof</span> <span class="type-name">T</span>]: <span class="type-name">T</span>[<span class="type-name">K</span>];
+};
+</pre>
+    </div>
+    <div class="code-block">
+      <div class="code-label label-ok">type — 条件类型</div>
+<pre>
+<span class="cmt">// 提取 Promise 内部类型</span>
+<span class="kw">type</span> <span class="type-name">UnwrapPromise</span>&lt;<span class="type-name">T</span>&gt; =
+  <span class="type-name">T</span> <span class="kw">extends</span> <span class="type-name">Promise</span>&lt;<span class="kw">infer</span> <span class="type-name">U</span>&gt; ? <span class="type-name">U</span> : <span class="type-name">T</span>;
+
+<span class="cmt">// UnwrapPromise&lt;Promise&lt;string&gt;&gt; → string</span>
+<span class="cmt">// UnwrapPromise&lt;number&gt;          → number</span>
+
+<span class="cmt">// 排除 null 和 undefined</span>
+<span class="kw">type</span> <span class="type-name">NonNullable</span>&lt;<span class="type-name">T</span>&gt; =
+  <span class="type-name">T</span> <span class="kw">extends</span> <span class="type-name">null</span> | <span class="type-name">undefined</span> ? <span class="kw">never</span> : <span class="type-name">T</span>;
+</pre>
+    </div>
+    <div class="code-block">
+      <div class="code-label label-ok">type — 模板字面量类型</div>
+<pre>
+<span class="kw">type</span> <span class="type-name">EventName</span> = <span class="str">`on${<span class="type-name">Capitalize</span>&lt;<span class="str">"click"</span> | <span class="str">"focus"</span> | <span class="str">"blur"</span>&gt;}`</span>;
+<span class="cmt">// → "onClick" | "onFocus" | "onBlur"</span>
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- 6. class implements -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">6. 类实现契约（class implements）</span>
+    <span class="tag tag-both">两者都能做</span>
+  </div>
+  <div class="section-body">
+    <div class="code-block">
+      <div class="code-label label-info">interface 和 type 都可以被 class 实现</div>
+<pre>
+<span class="kw">interface</span> <span class="type-name">ILogger</span> {
+  <span class="fn">log</span>(<span class="prop">msg</span>: <span class="type-name">string</span>): <span class="type-name">void</span>;
+}
+
+<span class="kw">type</span> <span class="type-name">TLogger</span> = {
+  <span class="fn">log</span>(<span class="prop">msg</span>: <span class="type-name">string</span>): <span class="type-name">void</span>;
+};
+
+<span class="cmt">// 两种写法都合法</span>
+<span class="kw">class</span> <span class="type-name">ConsoleLogger</span> <span class="kw">implements</span> <span class="type-name">ILogger</span> {
+  <span class="fn">log</span>(<span class="prop">msg</span>: <span class="type-name">string</span>) { <span class="prop">console</span>.<span class="fn">log</span>(<span class="prop">msg</span>); }
+}
+
+<span class="kw">class</span> <span class="type-name">FileLogger</span> <span class="kw">implements</span> <span class="type-name">TLogger</span> {
+  <span class="fn">log</span>(<span class="prop">msg</span>: <span class="type-name">string</span>) { <span class="cmt">/* 写入文件 */</span> }
+}
+</pre>
+    </div>
+    <div class="note">
+      <strong>但注意：</strong><code>class</code> 不能 <code>implements</code> 联合类型，如 <code>type A = X | Y</code> 是不行的。
+    </div>
+  </div>
+</div>
+
+<!-- 7. 冲突处理 -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">7. 属性冲突时的行为差异</span>
+    <span class="tag tag-diff">关键区别</span>
+  </div>
+  <div class="section-body">
+    <div class="code-block">
+      <div class="code-label label-err">interface extends — 冲突直接报错（安全）</div>
+<pre>
+<span class="kw">interface</span> <span class="type-name">A</span> { <span class="prop">x</span>: <span class="type-name">string</span>; }
+<span class="kw">interface</span> <span class="type-name">B</span> { <span class="prop">x</span>: <span class="type-name">number</span>; }
+
+<span class="cmt">// Error: Type 'number' is not assignable to type 'string'</span>
+<span class="kw">interface</span> <span class="type-name">C</span> <span class="kw">extends</span> <span class="type-name">A</span>, <span class="type-name">B</span> {}
+</pre>
+    </div>
+    <div class="code-block">
+      <div class="code-label label-err">type &amp; — 冲突静默产生 never（危险）</div>
+<pre>
+<span class="kw">type</span> <span class="type-name">A</span> = { <span class="prop">x</span>: <span class="type-name">string</span> };
+<span class="kw">type</span> <span class="type-name">B</span> = { <span class="prop">x</span>: <span class="type-name">number</span> };
+
+<span class="kw">type</span> <span class="type-name">C</span> = <span class="type-name">A</span> <span class="op">&</span> <span class="type-name">B</span>;
+<span class="cmt">// C 的 x 属性变成 string & number → never</span>
+<span class="cmt">// 不会报错，但赋值时任何值都不满足</span>
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- 总结表格 -->
+<div class="summary-box">
+  <h2>总结对比表</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>能力</th>
+        <th>interface</th>
+        <th>type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>声明合并</td>
+        <td><span class="check">&#10003;</span></td>
+        <td><span class="cross">&#10007;</span></td>
+      </tr>
+      <tr>
+        <td>extends 继承</td>
+        <td><span class="check">&#10003;</span></td>
+        <td><span class="cross">&#10007;</span> (用 &amp; 代替)</td>
+      </tr>
+      <tr>
+        <td>联合类型</td>
+        <td><span class="cross">&#10007;</span></td>
+        <td><span class="check">&#10003;</span></td>
+      </tr>
+      <tr>
+        <td>元组</td>
+        <td><span class="cross">&#10007;</span></td>
+        <td><span class="check">&#10003;</span></td>
+      </tr>
+      <tr>
+        <td>映射类型</td>
+        <td><span class="cross">&#10007;</span></td>
+        <td><span class="check">&#10003;</span></td>
+      </tr>
+      <tr>
+        <td>条件类型</td>
+        <td><span class="cross">&#10007;</span></td>
+        <td><span class="check">&#10003;</span></td>
+      </tr>
+      <tr>
+        <td>基本类型别名</td>
+        <td><span class="cross">&#10007;</span></td>
+        <td><span class="check">&#10003;</span></td>
+      </tr>
+      <tr>
+        <td>class implements</td>
+        <td><span class="check">&#10003;</span></td>
+        <td><span class="check">&#10003;</span> (仅对象类型)</td>
+      </tr>
+      <tr>
+        <td>编译性能</td>
+        <td><span class="check">&#10003;</span> 更优</td>
+        <td>交叉类型复杂时较慢</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="tip">
+  <strong>面试口诀：</strong>描述对象"长什么样"用 <code>interface</code>，做类型运算和组合用 <code>type</code>。真正的区分点只在 <strong>声明合并</strong> 和 <strong>类型运算能力</strong> 上。
+</div>
+
+</body>
+</html>
