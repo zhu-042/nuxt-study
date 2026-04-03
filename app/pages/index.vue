@@ -63,5 +63,11 @@ const demos = [
     desc: '演示 Pinia 完整 CRUD + Tailwind 样式实战',
     tag: 'Pinia + Tailwind',
   },
+  {
+    to: '/interview',
+    title: '面试题库',
+    desc: '基于简历定制的前端面试题，含基础、项目深挖、场景设计等 6 大分类',
+    tag: '面试准备',
+  },
 ]
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="h-screen flex flex-col bg-gray-50 overflow-hidden">
     <nav class="bg-white shadow-sm border-b border-gray-200">
       <div class="max-w-4xl mx-auto px-4 sm:px-6">
         <div class="flex items-center justify-between h-14">
@@ -20,7 +20,7 @@
         </div>
       </div>
     </nav>
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+    <main class="flex-1 h-0">
       <slot />
     </main>
   </div>
@@ -31,5 +31,6 @@ const navLinks = [
   { to: '/', label: '首页' },
   { to: '/counter', label: '计数器' },
   { to: '/todo', label: '待办列表' },
+  { to: '/interview', label: '面试题库' },
 ]
 </script>
