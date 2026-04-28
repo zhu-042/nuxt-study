@@ -58,6 +58,12 @@ const demos = [
     tag: 'Pinia 基础',
   },
   {
+    to: '/verify-code',
+    title: '验证码按钮',
+    desc: '实现发送按钮、倒计时禁用与重试文案切换',
+    tag: 'Vue 交互题',
+  },
+  {
     to: '/todo',
     title: '待办列表',
     desc: '演示 Pinia 完整 CRUD + Tailwind 样式实战',

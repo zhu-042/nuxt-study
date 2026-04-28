@@ -30,6 +30,7 @@
 const navLinks = [
   { to: '/', label: '首页' },
   { to: '/counter', label: '计数器' },
+  { to: '/verify-code', label: '验证码按钮' },
   { to: '/todo', label: '待办列表' },
   { to: '/interview', label: '面试题库' },
 ]
