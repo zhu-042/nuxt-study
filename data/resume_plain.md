@@ -1,4 +1,4 @@
-朱双林 &ensp;|&ensp; 18836821691 &ensp;|&ensp; zrg042@163.com &ensp;|&ensp; 22岁 &ensp;|&ensp; 2年经验 &ensp;|&ensp; 求职意向：前端开发工程师
+朱双林 &ensp;|&ensp; 18836821691 &ensp;|&ensp; zrg042@163.com &ensp;|&ensp; 23岁 &ensp;|&ensp; 2年经验 &ensp;|&ensp; 求职意向：前端开发工程师
 
 ---
 
